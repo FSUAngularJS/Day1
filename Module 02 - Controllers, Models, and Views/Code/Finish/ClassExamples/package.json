@@ -1,0 +1,18 @@
+{
+  "name": "angularjs",
+  "version": "1.0.0",
+  "description": "Class App for AngularJS Course",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server",
+    "test": "test"    
+  },
+  "keywords": [
+    "AngularJS"
+  ],
+  "author": "Jeff McBride",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.9.0"
+  }
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Module 03.2 Organizing Code</title>
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script>
+
+    </script>
+</head>
+<body >
+  <h1>Module 03.2 Organizing Code</h1>
+  <div ng-app="simpleApp">
+    <div ng-controller="SimpleController as vm">
+        First Name <input type="text" ng-model="vm.person.firstName"/><br/>
+        Last Name <input type="text" ng-model="vm.person.lastName"/><br/>
+        <button ng-click="vm.saveClick()">Save</button><br/>
+        {{vm.message}}
+    </div>
+  </div>
+
+  <script src="03.2OrganizingCode.module.js"></script>
+  <script src="03.2OrganizingCode.controller.js"></script>
+</body>
+</html>

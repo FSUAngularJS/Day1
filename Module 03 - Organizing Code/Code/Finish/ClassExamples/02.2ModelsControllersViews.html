@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Module 02.2 Models, Controllers, and Views</title>
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script>
+      angular
+        .module("simpleApp", [])
+
+        // Avoid Function Expressions per JPASG
+      	.controller("SimpleController", function ($scope) { $scope.message="Hello World"; }) // Function Expression
+
+        // Prefer Function Declarations instead; readability, debugging, minimize nested code
+        //    https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md#style-y024
+      	.controller("ScopeController", ScopeController)
+        .controller("ThisController", ThisController);
+
+      function ScopeController($scope) { // Function Declaration
+        // Avoid $scope
+        $scope.person = {
+          firstName: "",
+          lastName: "",
+          display: function() { return "Hi, I'm " + this.firstName + " " + this.lastName; }
+        };
+        $scope.saveClick = function() {
+          $scope.message = $scope.person.display();
+        }
+      }
+
+      function ThisController() { // Function Declaration
+        // Prefer this syntax
+        //    https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md#style-y031
+        // Combined with vm alias to avoid scope issues
+        //    https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md#style-y032
+        // Prefer bindable members up top, alphabetical
+        //    https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md#style-y033
+        var vm = this;
+        vm.person = {
+          firstName: "",
+          lastName: "",
+          display: function() { return "Hi, I'm " + this.firstName + " " + this.lastName; }
+        };
+        vm.saveClick = saveClick;
+
+        // Use function declarations to move implementation details down away from declarations
+        // https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md#style-y034
+        function saveClick() {
+          vm.message = vm.person.display();
+        }
+      }
+    </script>
+</head>
+<body >
+  <h1>Module 02.2 Models, Controllers, and Views</h1>
+  <div ng-app="simpleApp">
+    <div ng-controller="SimpleController">{{message}}</div><br/>
+
+    <!-- Avoid $scope / Controller Syntax -->
+    <div ng-controller="ScopeController">
+        First Name <input type="text" ng-model="person.firstName"/><br/>
+        Last Name <input type="text" ng-model="person.lastName"/><br/>
+        <button ng-click="saveClick()">Save</button><br/>
+        {{message}}
+    </div><br/>
+
+    <!-- Prefer this / Controller as Syntax -->
+    <!-- https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md#style-y030 -->
+    <div ng-controller="ThisController as tc">
+        First Name <input type="text" ng-model="tc.person.firstName"/><br/>
+        Last Name <input type="text" ng-model="tc.person.lastName"/><br/>
+        <button ng-click="tc.saveClick()">Save</button><br/>
+        {{tc.message}}<br/>
+        <!-- ngBind is faster than {{ bind }} syntaxt -->
+        <!-- http://ng-perf.com/2014/10/30/tip-4-ng-bind-is-faster-than-expression-bind-and-one-time-bind/ -->
+       <span ng-bind="tc.message"></span>
+    </div>
+  </div>
+</body>
+</html>

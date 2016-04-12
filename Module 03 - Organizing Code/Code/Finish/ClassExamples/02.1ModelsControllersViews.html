@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Module 02.1 Models, Controllers, and Views</title>
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script>
+      angular
+        .module("simpleApp", [])
+        .controller("SimpleController", function ($scope) { $scope.message="Hello World"; }) // Function Expression
+      	.controller("ScopeController", ScopeController)
+        .controller("ThisController", ThisController);
+
+      function ScopeController($scope) { // Function Declaration
+        $scope.person = {
+          firstName: "",
+          lastName: "",
+          display: function() { return "Hi, I'm " + this.firstName + " " + this.lastName; }
+        };
+        $scope.saveClick = function() {
+          $scope.message = $scope.person.display();
+        }
+      }
+
+      function ThisController() {
+        var vm = this;
+        vm.person = {
+          firstName: "",
+          lastName: "",
+          display: function() { return "Hi, I'm " + this.firstName + " " + this.lastName; }
+        };
+        vm.saveClick = saveClick;
+
+        function saveClick() {
+          vm.message = vm.person.display();
+        }
+      }
+    </script>
+</head>
+<body>
+  <h1>Module 02.1 Models, Controllers, and Views</h1>
+  <div ng-app="simpleApp">
+    <div ng-controller="SimpleController">{{message}}</div><br/>
+
+    <div ng-controller="ScopeController">
+        First Name <input type="text" ng-model="person.firstName"/><br/>
+        Last Name <input type="text" ng-model="person.lastName"/><br/>
+        <button ng-click="saveClick()">Save</button><br/>
+        {{message}}
+    </div><br/>
+
+    <div ng-controller="ThisController as tc">
+        First Name <input type="text" ng-model="tc.person.firstName"/><br/>
+        Last Name <input type="text" ng-model="tc.person.lastName"/><br/>
+        <button ng-click="tc.saveClick()">Save</button><br/>
+        {{tc.message}}<br/>
+        <!-- ngBind is faster than {{ bind }} syntaxt -->
+        <!-- http://ng-perf.com/2014/10/30/tip-4-ng-bind-is-faster-than-expression-bind-and-one-time-bind/ -->
+        <span ng-bind="tc.message"></span>
+    </div>
+  </div>
+</body>
+</html>
